@@ -1,24 +1,3 @@
-// Mock data for demonstration
-async function loadProject(projectId: string) {
-	// Simulate API call delay
-	await new Promise((resolve) => setTimeout(resolve, 150))
-
-	return {
-		id: projectId,
-		name: `Project ${projectId}`,
-		description:
-			"A comprehensive project showcasing React Router's server component capabilities",
-		status: 'active',
-		createdAt: new Date().toISOString(),
-		technologies: ['React', 'TypeScript', 'React Router', 'RSC'],
-		metrics: {
-			stars: Math.floor(Math.random() * 1000) + 100,
-			forks: Math.floor(Math.random() * 100) + 10,
-			issues: Math.floor(Math.random() * 50) + 5,
-		},
-	}
-}
-
 // Server Component - this is the key pattern!
 export async function ServerComponent({
 	params,
@@ -29,7 +8,7 @@ export async function ServerComponent({
 
 	return (
 		<>
-			<title>{project.name} - Server Component Route</title>
+			<title>{`${project.name} - Server Component Route`}</title>
 			<meta name="description" content={project.description} />
 
 			<main className="min-h-screen bg-white dark:bg-gray-900">
@@ -129,4 +108,25 @@ export async function ServerComponent({
 			</main>
 		</>
 	)
+}
+
+const stars = Math.floor(Math.random() * 1000) + 100
+const forks = Math.floor(Math.random() * 100) + 10
+const issues = Math.floor(Math.random() * 50) + 5
+
+// Mock data for demonstration
+async function loadProject(projectId: string) {
+	// Simulate API call delay
+	await new Promise((resolve) => setTimeout(resolve, 150))
+
+	return {
+		id: projectId,
+		name: `Project ${projectId}`,
+		description:
+			"A comprehensive project showcasing React Router's server component capabilities",
+		status: 'active',
+		createdAt: new Date().toISOString(),
+		technologies: ['React', 'TypeScript', 'React Router', 'RSC'],
+		metrics: { stars, forks, issues },
+	}
 }

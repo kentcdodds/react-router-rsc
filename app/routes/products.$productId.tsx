@@ -45,10 +45,10 @@ export async function loader({ params }: Route.LoaderArgs) {
 	}
 }
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ loaderData }: Route.MetaArgs) {
 	return [
-		{ title: `${data.product.name} - React Router RSC Demo` },
-		{ name: 'description', content: data.product.description },
+		{ title: `${loaderData.product.name} - React Router RSC Demo` },
+		{ name: 'description', content: loaderData.product.description },
 	]
 }
 
@@ -68,9 +68,9 @@ export default function ProductPage(props: Route.ComponentProps) {
 							🚀 RSC from Loaders Demo
 						</h2>
 						<p className="rr-text text-sm">
-							This content is rendered on the server using React Router's RSC
-							from loaders feature. Only the final rendered HTML is sent to the
-							browser - no JavaScript for these components!
+							The content below is rendered on the server using React Router's
+							RSC from loaders feature. Only the final rendered HTML is sent to
+							the browser - no JavaScript for these components!
 						</p>
 					</div>
 				</div>
