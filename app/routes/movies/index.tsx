@@ -1,4 +1,4 @@
-import type { Route } from './+types/movies'
+import type { Route } from './+types/index'
 import React, { useActionState, useOptimistic } from 'react'
 import { getMovies, Movie, toggleFavorite } from './movies-data.ts'
 

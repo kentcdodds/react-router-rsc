@@ -24,7 +24,7 @@ export function ServerComponent() {
 					</p>
 				</header>
 
-				<div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+				<div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
 					{/* RSC from Loaders */}
 					<div className="rr-card">
 						<div className="mb-4 flex items-center gap-3">
@@ -90,23 +90,6 @@ export function ServerComponent() {
 							performance with client interactivity.
 						</p>
 						<a href="/dashboard" className="rr-button">
-							View Demo →
-						</a>
-					</div>
-
-					{/* Data Mode APIs */}
-					<div className="rr-card">
-						<div className="mb-4 flex items-center gap-3">
-							<span className="text-2xl">🔧</span>
-							<h2 className="rr-heading text-xl font-semibold">
-								Data Mode APIs
-							</h2>
-						</div>
-						<p className="rr-text mb-6">
-							Lower-level RSC APIs for custom frameworks. Build powerful
-							applications with flexible architecture.
-						</p>
-						<a href="/data-mode" className="rr-button">
 							View Demo →
 						</a>
 					</div>

@@ -4,7 +4,6 @@ export default [
 	index('routes/home.tsx'),
 	route('products/:productId', 'routes/products.$productId.tsx'),
 	route('projects/:projectId', 'routes/projects.$projectId.tsx'),
-	route('movies', 'routes/movies.tsx'),
-	route('dashboard', 'routes/dashboard.tsx'),
-	route('data-mode', 'routes/data-mode.tsx'),
+	route('movies', 'routes/movies/index.tsx'),
+	route('dashboard', 'routes/dashboard/index.tsx'),
 ] satisfies RouteConfig
