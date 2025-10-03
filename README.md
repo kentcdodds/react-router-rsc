@@ -1,8 +1,11 @@
 # Welcome to React Router! (Experimental RSC)
 
-⚠️ **EXPERIMENTAL**: This template demonstrates React Server Components with React Router. This is experimental technology and not recommended for production use.
+⚠️ **EXPERIMENTAL**: This template demonstrates React Server Components with
+React Router. This is experimental technology and not recommended for production
+use.
 
-A modern template for exploring React Server Components (RSC) with React Router, powered by Vite.
+A modern template for exploring React Server Components (RSC) with React Router,
+powered by Vite.
 
 ## Features
 
@@ -14,7 +17,8 @@ A modern template for exploring React Server Components (RSC) with React Router,
 - 🔒 TypeScript by default
 - 🎉 TailwindCSS for styling
 - 📖 [React Router docs](https://reactrouter.com/)
-- 📚 [React Server Components guide](https://reactrouter.com/how-to/react-server-components)
+- 📚
+  [React Server Components guide](https://reactrouter.com/how-to/react-server-components)
 
 ## Getting Started
 
@@ -54,12 +58,15 @@ npm start
 
 ## Understanding React Server Components
 
-Learn more about React Server Components with React Router in our [comprehensive guide](https://reactrouter.com/how-to/react-server-components).
+Learn more about React Server Components with React Router in our
+[comprehensive guide](https://reactrouter.com/how-to/react-server-components).
 
 ## Styling
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already
+configured for a simple default starting experience. You can use whatever CSS
+framework you prefer.
 
 ---
 
-Built with ❤️ using React Router. 
+Built with ❤️ using React Router.
