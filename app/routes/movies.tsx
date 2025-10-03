@@ -1,40 +1,6 @@
 import type { Route } from './+types/movies'
-import { useOptimistic } from 'react'
-
-// Mock data for demonstration
-let movies = [
-	{ id: 1, title: 'The Matrix', year: 1999, isFavorite: false },
-	{ id: 2, title: 'Inception', year: 2010, isFavorite: true },
-	{ id: 3, title: 'Interstellar', year: 2014, isFavorite: false },
-	{ id: 4, title: 'Blade Runner 2049', year: 2017, isFavorite: true },
-	{ id: 5, title: 'Dune', year: 2021, isFavorite: false },
-]
-
-async function getMovies() {
-	// Simulate API call delay
-	await new Promise((resolve) => setTimeout(resolve, 100))
-	return movies
-}
-
-// Server function with automatic revalidation
-export async function action({ request }: Route.ActionArgs) {
-	const formData = await request.formData()
-	const movieId = Number(formData.get('id'))
-	const actionType = formData.get('action') as string
-
-	if (actionType === 'toggle-favorite') {
-		// Update the movie's favorite status
-		const movie = movies.find((m) => m.id === movieId)
-		if (movie) {
-			movie.isFavorite = !movie.isFavorite
-		}
-
-		// React Router automatically revalidates the route after this action!
-		return { success: true, movieId, isFavorite: movie?.isFavorite }
-	}
-
-	return { success: false }
-}
+import React, { useActionState, useOptimistic } from 'react'
+import { getMovies, Movie, toggleFavorite } from './movies-data.ts'
 
 export async function loader() {
 	return {
@@ -53,32 +19,24 @@ export function meta() {
 	]
 }
 
-export default function MoviesPage(props: Route.ComponentProps) {
-	const data = props.loaderData
+export default function MoviesPage({ loaderData }: Route.ComponentProps) {
+	const [failureChance, setFailureChance] = React.useState(0)
+	const [actionState, toggleAction, isPending] = useActionState(
+		toggleFavorite,
+		null,
+	)
 
-	if (!data || !data.movies) {
-		return (
-			<main className="bg-background min-h-screen">
-				<div className="mx-auto max-w-6xl px-6 py-16">
-					<div className="text-center">
-						<h1 className="rr-heading mb-4 text-2xl font-bold">Loading...</h1>
-						<p className="rr-text">Please wait while we load the movies.</p>
-					</div>
-				</div>
-			</main>
-		)
+	// Get error for specific movie
+	const getMovieError = (movieId: number) => {
+		return actionState?.movieId === movieId && !actionState?.success
+			? actionState.error
+			: null
 	}
 
-	const [optimisticMovies, addOptimisticMovie] = useOptimistic(
-		data.movies,
-		(
-			state,
-			{ movieId, isFavorite }: { movieId: number; isFavorite: boolean },
-		) =>
-			state.map((movie: any) =>
-				movie.id === movieId ? { ...movie, isFavorite } : movie,
-			),
-	)
+	// Check if a specific movie is pending
+	const isMoviePending = (movieId: number) => {
+		return isPending && actionState?.movieId === movieId
+	}
 
 	return (
 		<main className="bg-background min-h-screen">
@@ -107,40 +65,75 @@ export default function MoviesPage(props: Route.ComponentProps) {
 						Movie Collection
 					</h1>
 
+					<div className="rr-card mb-8">
+						<h3 className="rr-heading mb-4 font-semibold">
+							Toggle Failure Control
+						</h3>
+						<div className="flex items-center gap-4">
+							<label
+								htmlFor="failure-chance"
+								className="rr-text text-sm font-medium"
+							>
+								Failure Chance: {failureChance}%
+							</label>
+							<input
+								id="failure-chance"
+								type="range"
+								min="0"
+								max="100"
+								value={failureChance}
+								onChange={(e) => setFailureChance(Number(e.target.value))}
+								className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-200"
+							/>
+						</div>
+						<p className="rr-text mt-2 text-xs text-gray-600">
+							Adjust the slider to control the chance that toggle operations
+							will fail (for demonstration purposes)
+						</p>
+					</div>
+
 					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-						{optimisticMovies.map((movie: any) => (
+						{loaderData.movies.map((movie) => (
 							<div key={movie.id} className="rr-card">
 								<div className="mb-4 flex items-start justify-between">
 									<h3 className="rr-heading text-lg font-semibold">
 										{movie.title}
 									</h3>
-									<form method="post" className="inline">
-										<input type="hidden" name="id" value={movie.id} />
-										<input
-											type="hidden"
-											name="action"
-											value="toggle-favorite"
-										/>
-										<button
-											type="submit"
-											onClick={() =>
-												addOptimisticMovie({
-													movieId: movie.id,
-													isFavorite: !movie.isFavorite,
-												})
-											}
-											className={`rr-favorite-button text-2xl ${
-												movie.isFavorite ? 'favorite' : ''
-											}`}
-											title={
-												movie.isFavorite
-													? 'Remove from favorites'
-													: 'Add to favorites'
-											}
-										>
-											{movie.isFavorite ? '❤️' : '🤍'}
-										</button>
-									</form>
+									<div className="flex flex-col items-end">
+										<form action={toggleAction} className="inline">
+											<input type="hidden" name="id" value={movie.id} />
+											<input
+												type="hidden"
+												name="isFavorite"
+												value={String(!movie.isFavorite)}
+											/>
+											<input
+												type="hidden"
+												name="failureChance"
+												value={failureChance}
+											/>
+											<button
+												type="submit"
+												className={`rr-favorite-button text-2xl ${
+													movie.isFavorite ? 'favorite' : ''
+												} ${isMoviePending(movie.id) ? 'opacity-50' : ''}`}
+												title={
+													movie.isFavorite
+														? 'Remove from favorites'
+														: 'Add to favorites'
+												}
+											>
+												{movie.isFavorite ? '❤️' : '🤍'}
+											</button>
+										</form>
+										<div className="mt-1 h-4 text-right">
+											{getMovieError(movie.id) ? (
+												<p className="text-warning text-xs">
+													{getMovieError(movie.id)}
+												</p>
+											) : null}
+										</div>
+									</div>
 								</div>
 
 								<p className="rr-text mb-2">Year: {movie.year}</p>
@@ -164,8 +157,8 @@ export default function MoviesPage(props: Route.ComponentProps) {
 								<span className="rr-code">action</span> export
 							</li>
 							<li>
-								• <span className="rr-code">useOptimistic</span> provides
-								immediate UI updates before server responds
+								• <span className="rr-code">useActionState</span> provides
+								built-in error handling and pending states
 							</li>
 							<li>
 								• Form submissions automatically trigger the server function
@@ -174,9 +167,7 @@ export default function MoviesPage(props: Route.ComponentProps) {
 								• React Router revalidates the route data after the action
 								completes
 							</li>
-							<li>
-								• Seamless optimistic updates with automatic rollback on errors!
-							</li>
+							<li>• Modern error handling with automatic state management!</li>
 						</ul>
 					</div>
 				</div>
