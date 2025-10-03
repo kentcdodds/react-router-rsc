@@ -1,11 +1,19 @@
-# Welcome to React Router! (Experimental RSC)
+# React Router's RSC Demo
 
-⚠️ **EXPERIMENTAL**: This template demonstrates React Server Components with
-React Router. This is experimental technology and not recommended for production
-use.
+⚠️ **EXPERIMENTAL**: This demo showcases React Router's unique approach to React
+Server Components (RSC). This is experimental technology and not recommended for
+production use.
 
-A modern template for exploring React Server Components (RSC) with React Router,
-powered by Vite.
+This project demonstrates React Router's innovative RSC integration featuring:
+
+- **RSC from Loaders**: Return React elements directly from loaders/actions for
+  incremental adoption
+- **Server Component Routes**: Mixed server/client routes in the same app tree
+- **Zero Bundle Routes**: Server-only routes that never send JavaScript to the
+  browser
+- **Automatic Revalidation**: Server actions with seamless cache management
+
+Built with Vite and powered by React Router's experimental RSC implementation.
 
 ## Features
 
