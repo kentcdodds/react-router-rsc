@@ -1,6 +1,7 @@
 import type { Route } from './+types/index'
-import React, { useActionState, useOptimistic } from 'react'
-import { getMovies, Movie, toggleFavorite } from './movies-data.ts'
+import React, { useActionState } from 'react'
+import { Link } from 'react-router'
+import { getMovies, toggleFavorite } from '#app/movies-data.ts'
 
 export async function loader() {
 	return {
@@ -8,9 +9,14 @@ export async function loader() {
 	}
 }
 
+export async function action({ request }: Route.ActionArgs) {
+	const formData = await request.formData()
+	return await toggleFavorite(null, formData)
+}
+
 export function meta() {
 	return [
-		{ title: 'Movies - Server Functions Demo' },
+		{ title: 'Demo 3: Server Functions with use server' },
 		{
 			name: 'description',
 			content:
@@ -19,7 +25,7 @@ export function meta() {
 	]
 }
 
-export default function MoviesPage({ loaderData }: Route.ComponentProps) {
+export default function Demo3Page({ loaderData }: Route.ComponentProps) {
 	const [failureChance, setFailureChance] = React.useState(0)
 	const [actionState, toggleAction, isPending] = useActionState(
 		toggleFavorite,
@@ -50,12 +56,12 @@ export default function MoviesPage({ loaderData }: Route.ComponentProps) {
 
 					<div className="rr-highlight mb-8">
 						<h2 className="rr-heading mb-2 text-lg font-semibold">
-							⚡ Server Functions Demo
+							⚡ Demo 3: Server Functions with 'use server'
 						</h2>
 						<p className="rr-text text-sm">
-							Click the heart icons to toggle favorites. React Router
-							automatically revalidates the route data after each server action
-							- seamless data updates!
+							Now we add server functions! Click the heart icons to toggle
+							favorites. React Router automatically revalidates the route data
+							after each server action.
 						</p>
 					</div>
 				</div>
@@ -95,62 +101,73 @@ export default function MoviesPage({ loaderData }: Route.ComponentProps) {
 					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 						{loaderData.movies.map((movie) => (
 							<div key={movie.id} className="rr-card">
-								<div className="mb-4 flex items-start justify-between">
-									<h3 className="rr-heading text-lg font-semibold">
-										{movie.title}
-									</h3>
-									<div className="flex flex-col items-end">
-										<form action={toggleAction} className="inline">
-											<input type="hidden" name="id" value={movie.id} />
-											<input
-												type="hidden"
-												name="isFavorite"
-												value={String(!movie.isFavorite)}
-											/>
-											<input
-												type="hidden"
-												name="failureChance"
-												value={failureChance}
-											/>
-											<button
-												type="submit"
-												className={`rr-favorite-button text-2xl ${
-													movie.isFavorite ? 'favorite' : ''
-												} ${isMoviePending(movie.id) ? 'opacity-50' : ''}`}
-												title={
-													movie.isFavorite
-														? 'Remove from favorites'
-														: 'Add to favorites'
-												}
-											>
-												{movie.isFavorite ? '❤️' : '🤍'}
-											</button>
-										</form>
-										<div className="mt-1 h-4 text-right">
-											{getMovieError(movie.id) ? (
-												<p className="text-warning text-xs">
-													{getMovieError(movie.id)}
-												</p>
-											) : null}
+								<div className="mb-4">
+									<img
+										src={movie.poster}
+										alt={`${movie.title} poster`}
+										className="mb-4 h-64 w-full rounded-lg object-cover"
+									/>
+									<div className="flex items-start justify-between">
+										<div className="flex-1">
+											<h3 className="rr-heading text-lg font-semibold">
+												{movie.title}
+											</h3>
+											<p className="rr-text mb-2">Year: {movie.year}</p>
+											<p className="rr-text mb-2">Rating: {movie.rating}/10</p>
+											<p className="rr-text mb-4 text-sm text-gray-600">
+												{movie.description}
+											</p>
+										</div>
+										<div className="flex flex-col items-end">
+											<form action={toggleAction} className="inline">
+												<input type="hidden" name="id" value={movie.id} />
+												<input
+													type="hidden"
+													name="isFavorite"
+													value={String(!movie.isFavorite)}
+												/>
+												<input
+													type="hidden"
+													name="failureChance"
+													value={failureChance}
+												/>
+												<button
+													type="submit"
+													className={`rr-favorite-button text-2xl ${
+														movie.isFavorite ? 'favorite' : ''
+													} ${isMoviePending(movie.id) ? 'opacity-50' : ''}`}
+													title={
+														movie.isFavorite
+															? 'Remove from favorites'
+															: 'Add to favorites'
+													}
+												>
+													{movie.isFavorite ? '❤️' : '🤍'}
+												</button>
+											</form>
+											<div className="mt-1 h-4 text-right">
+												{getMovieError(movie.id) ? (
+													<p className="text-warning text-xs">
+														{getMovieError(movie.id)}
+													</p>
+												) : null}
+											</div>
 										</div>
 									</div>
-								</div>
-
-								<p className="rr-text mb-2">Year: {movie.year}</p>
-
-								<div className="flex items-center gap-2">
-									<span
-										className={`rr-badge ${movie.isFavorite ? 'rr-badge-red' : ''}`}
-									>
-										{movie.isFavorite ? 'Favorite' : 'Not Favorite'}
-									</span>
+									<div className="flex items-center gap-2">
+										<span
+											className={`rr-badge ${movie.isFavorite ? 'rr-badge-red' : ''}`}
+										>
+											{movie.isFavorite ? 'Favorite' : 'Not Favorite'}
+										</span>
+									</div>
 								</div>
 							</div>
 						))}
 					</div>
 
 					<div className="rr-card mt-8">
-						<h3 className="rr-heading mb-2 font-semibold">How it works:</h3>
+						<h3 className="rr-heading mb-2 font-semibold">What's new:</h3>
 						<ul className="rr-text space-y-1 text-sm">
 							<li>
 								• Server functions are defined with the{' '}

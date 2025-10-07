@@ -1,7 +1,7 @@
 import type { Route } from './+types/index'
 import React from 'react'
 import { Link } from 'react-router'
-import { getMovies } from '../movies/movies-data.ts'
+import { getMovies } from '#app/movies-data.ts'
 
 export async function loader() {
 	return {

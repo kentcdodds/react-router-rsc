@@ -1,27 +1,11 @@
 import type { Route } from './+types/index'
 import React from 'react'
-import { getMovies } from '../movies/movies-data.ts'
+import { getMovies } from '#app/movies-data.ts'
 import { MovieCard } from './movie-card'
 
-export async function loader() {
-	return {
-		movies: await getMovies(),
-	}
-}
-
-export function meta() {
-	return [
-		{ title: 'Demo 5: use client for Interactive Elements' },
-		{
-			name: 'description',
-			content:
-				'Combining server components with client components for optimal performance',
-		},
-	]
-}
-
 // Server component as the main page
-export default function Demo5Page({ loaderData }: Route.ComponentProps) {
+export async function ServerComponent() {
+	const movies = await getMovies()
 	return (
 		<main className="bg-background min-h-screen">
 			<div className="mx-auto max-w-6xl px-6 py-16">
@@ -50,7 +34,7 @@ export default function Demo5Page({ loaderData }: Route.ComponentProps) {
 					</h1>
 
 					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-						{loaderData.movies.map((movie) => (
+						{movies.map((movie) => (
 							<MovieCard key={movie.id} movie={movie} />
 						))}
 					</div>
@@ -79,4 +63,15 @@ export default function Demo5Page({ loaderData }: Route.ComponentProps) {
 			</div>
 		</main>
 	)
+}
+
+export function meta() {
+	return [
+		{ title: 'Demo 5: use client for Interactive Elements' },
+		{
+			name: 'description',
+			content:
+				'Combining server components with client components for optimal performance',
+		},
+	]
 }

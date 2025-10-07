@@ -1,6 +1,6 @@
 import type { Route } from './+types/$movieId'
 import React, { useActionState } from 'react'
-import { getMovie, toggleFavorite } from '../movies/movies-data.ts'
+import { getMovie, toggleFavorite } from '#app/movies-data.ts'
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const movie = await getMovie(Number(params.movieId))

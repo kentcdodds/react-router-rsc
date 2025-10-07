@@ -2,19 +2,17 @@ import { type RouteConfig, index, route } from '@react-router/dev/routes'
 
 export default [
 	index('routes/home.tsx'),
-	route('products/:productId', 'routes/products.$productId.tsx'),
-	route('projects/:projectId', 'routes/projects.$projectId.tsx'),
-	route('movies', 'routes/movies/index.tsx'),
-	route('dashboard', 'routes/dashboard/index.tsx'),
-	// Progressive demos
-	route('demo-1', 'routes/demo-1/index.tsx'),
-	route('demo-1/:movieId', 'routes/demo-1/$movieId.tsx'),
-	route('demo-2', 'routes/demo-2/index.tsx'),
-	route('demo-2/:movieId', 'routes/demo-2/$movieId.tsx'),
-	route('demo-3', 'routes/demo-3/index.tsx'),
-	route('demo-3/:movieId', 'routes/demo-3/$movieId.tsx'),
-	route('demo-4', 'routes/demo-4/index.tsx'),
-	route('demo-4/:movieId', 'routes/demo-4/$movieId.tsx'),
-	route('demo-5', 'routes/demo-5/index.tsx'),
-	route('demo-5/:movieId', 'routes/demo-5/$movieId.tsx'),
+	route('00', 'routes/00.playground/index.tsx'),
+	route('00/:movieId', 'routes/00.playground/$movieId.tsx'),
+
+	route('01', 'routes/01.basic-rr/index.tsx'),
+	route('01/:movieId', 'routes/01.basic-rr/$movieId.tsx'),
+	route('02', 'routes/02.loader-rsc/index.tsx'),
+	route('02/:movieId', 'routes/02.loader-rsc/$movieId.tsx'),
+	route('03', 'routes/03.loader-rsc/index.tsx'),
+	route('03/:movieId', 'routes/03.loader-rsc/$movieId.tsx'),
+	route('04', 'routes/04.rsc-route/index.tsx'),
+	route('04/:movieId', 'routes/04.rsc-route/$movieId.tsx'),
+	route('05', 'routes/05.use-client/index.tsx'),
+	route('05/:movieId', 'routes/05.use-client/$movieId.tsx'),
 ] satisfies RouteConfig

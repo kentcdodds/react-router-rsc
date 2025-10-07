@@ -1,6 +1,6 @@
 import type { Route } from './+types/$movieId'
 import React from 'react'
-import { getMovie } from '../movies/movies-data.ts'
+import { getMovie } from '#app/movies-data.ts'
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const movie = await getMovie(Number(params.movieId))
